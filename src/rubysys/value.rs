@@ -95,6 +95,7 @@ impl Value {
     }
 
     pub fn is_nil(&self) -> bool {
+        println!("is_nil {:?}", self.value);
         self.value == (RubySpecialConsts::Nil as InternalValue)
     }
 
@@ -111,6 +112,7 @@ impl Value {
     }
 
     pub fn is_fixnum(&self) -> bool {
+        println!("is_fixnum {:?}", self.value);
         (self.value & (RubySpecialFlags::FixnumFlag as InternalValue)) != 0
     }
 

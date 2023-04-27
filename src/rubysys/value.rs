@@ -10,9 +10,9 @@ const SPECIAL_SHIFT: usize = 8;
 #[cfg(target_pointer_width = "32")]
 pub enum RubySpecialConsts {
     False = 0,
-    True = 0x02,
-    Nil = 0x04,
-    Undef = 0x06,
+    True = 0x06,
+    Nil = 0x02,
+    Undef = 0x0a,
 }
 
 #[cfg(target_pointer_width = "32")]
@@ -74,6 +74,7 @@ pub enum ValueType {
     Node = 0x1b,
     IClass = 0x1c,
     Zombie = 0x1d,
+    Moved = 0x1e,
 
     Mask = 0x1f,
 }

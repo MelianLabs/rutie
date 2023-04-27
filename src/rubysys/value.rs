@@ -28,8 +28,8 @@ pub enum RubySpecialFlags {
 pub enum RubySpecialConsts {
     False = 0,
     True = 0x14,
-    Nil = 0x08,
-    Undef = 0x34,
+    Nil = 0x04,
+    Undef = 0x24,
 }
 
 #[cfg(target_pointer_width = "64")]

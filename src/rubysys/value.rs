@@ -153,6 +153,7 @@ impl Value {
 
     fn is_immediate(&self) -> bool {
         println!("is_immediate {:?}", self.value);
+        println!("RubySpecialFlags::ImmediateMask {:?}", RubySpecialFlags::ImmediateMask as InternalValue);
         (self.value & (RubySpecialFlags::ImmediateMask as InternalValue)) != 0
     }
 

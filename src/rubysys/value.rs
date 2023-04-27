@@ -101,6 +101,8 @@ impl Value {
 
     pub fn is_fixnum(&self) -> bool {
         println!("is_fixnum {:?}", self.value);
+        let backtrace = Backtrace::new();
+        eprintln!("Backtrace:\n{:?}", backtrace);
         (self.value & (RubySpecialFlags::FixnumFlag as InternalValue)) != 0
     }
 
@@ -150,6 +152,7 @@ impl Value {
     }
 
     fn is_immediate(&self) -> bool {
+        println!("is_immediate {:?}", self.value);
         (self.value & (RubySpecialFlags::ImmediateMask as InternalValue)) != 0
     }
 

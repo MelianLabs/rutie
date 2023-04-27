@@ -1,45 +1,31 @@
 use std::{convert::From, mem};
+use backtrace::Backtrace;
+
 
 use crate::rubysys::{
     constant,
     types::{InternalValue, RBasic},
 };
 
+use rb_sys::{ruby_special_consts, VALUE};
+
 const SPECIAL_SHIFT: usize = 8;
 
-#[cfg(target_pointer_width = "32")]
 pub enum RubySpecialConsts {
-    False = 0,
-    True = 0x02,
-    Nil = 0x04,
-    Undef = 0x06,
+    False = ruby_special_consts::RUBY_Qfalse as isize,
+    True = ruby_special_consts::RUBY_Qtrue as isize,
+    Nil = ruby_special_consts::RUBY_Qnil as isize,
+    Undef = ruby_special_consts::RUBY_Qundef as isize,
 }
 
-#[cfg(target_pointer_width = "32")]
 pub enum RubySpecialFlags {
-    ImmediateMask = 0x03,
-    FixnumFlag = 0x01,
-    FlonumMask = 0x00,
-    FlonumFlag = 0x02,
-    SymbolFlag = 0x0e,
+    ImmediateMask = ruby_special_consts::RUBY_IMMEDIATE_MASK as isize,
+    FixnumFlag = ruby_special_consts::RUBY_FIXNUM_FLAG as isize,
+    FlonumMask = ruby_special_consts::RUBY_FLONUM_MASK as isize,
+    FlonumFlag = ruby_special_consts::RUBY_FLONUM_FLAG as isize,
+    SymbolFlag = ruby_special_consts::RUBY_SYMBOL_FLAG as isize,
 }
 
-#[cfg(target_pointer_width = "64")]
-pub enum RubySpecialConsts {
-    False = 0,
-    True = 0x14,
-    Nil = 0x08,
-    Undef = 0x34,
-}
-
-#[cfg(target_pointer_width = "64")]
-pub enum RubySpecialFlags {
-    ImmediateMask = 0x07,
-    FixnumFlag = 0x01,
-    FlonumMask = 0x03,
-    FlonumFlag = 0x02,
-    SymbolFlag = 0x0c,
-}
 
 // #[link_name = "ruby_value_type"]
 #[derive(Debug, PartialEq)]
@@ -74,6 +60,7 @@ pub enum ValueType {
     Node = 0x1b,
     IClass = 0x1c,
     Zombie = 0x1d,
+    Moved = 0x1e,
 
     Mask = 0x1f,
 }
@@ -94,6 +81,9 @@ impl Value {
     }
 
     pub fn is_nil(&self) -> bool {
+        println!("is_nil {:?}", self.value);
+        let backtrace = Backtrace::new();
+        eprintln!("Backtrace:\n{:?}", backtrace);
         self.value == (RubySpecialConsts::Nil as InternalValue)
     }
 
@@ -110,6 +100,9 @@ impl Value {
     }
 
     pub fn is_fixnum(&self) -> bool {
+        println!("is_fixnum {:?}", self.value);
+        let backtrace = Backtrace::new();
+        eprintln!("Backtrace:\n{:?}", backtrace);
         (self.value & (RubySpecialFlags::FixnumFlag as InternalValue)) != 0
     }
 
@@ -123,7 +116,7 @@ impl Value {
     }
 
     pub fn ty(&self) -> ValueType {
-        if self.is_immediate() {
+        if !self.is_nil() && self.is_immediate() {
             if self.is_fixnum() {
                 ValueType::Fixnum
             } else if self.is_flonum() {
@@ -159,6 +152,8 @@ impl Value {
     }
 
     fn is_immediate(&self) -> bool {
+        println!("is_immediate {:?}", self.value);
+        println!("RubySpecialFlags::ImmediateMask {:?}", RubySpecialFlags::ImmediateMask as InternalValue);
         (self.value & (RubySpecialFlags::ImmediateMask as InternalValue)) != 0
     }
 

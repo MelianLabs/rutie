@@ -21,7 +21,8 @@ links = "ruby"
 no-link = [] # tells build.rs to not link to libruby
 
 [dependencies]
-libc = "0.2.121"
+rb-sys = "0.9.75"
+libc = "0.2.142"
 lazy_static = "1.4.0"
 
 [badges]

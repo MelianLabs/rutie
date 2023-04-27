@@ -5,41 +5,25 @@ use crate::rubysys::{
     types::{InternalValue, RBasic},
 };
 
+use rb_sys::{ruby_special_consts, VALUE};
+
 const SPECIAL_SHIFT: usize = 8;
 
-#[cfg(target_pointer_width = "32")]
 pub enum RubySpecialConsts {
-    False = 0,
-    True = 0x06,
-    Nil = 0x02,
-    Undef = 0x0a,
+    False = ruby_special_consts::RUBY_Qfalse as isize,
+    True = ruby_special_consts::RUBY_Qtrue as isize,
+    Nil = ruby_special_consts::RUBY_Qnil as isize,
+    Undef = ruby_special_consts::RUBY_Qundef as isize,
 }
 
-#[cfg(target_pointer_width = "32")]
 pub enum RubySpecialFlags {
-    ImmediateMask = 0x03,
-    FixnumFlag = 0x01,
-    FlonumMask = 0x00,
-    FlonumFlag = 0x02,
-    SymbolFlag = 0x0e,
+    ImmediateMask = ruby_special_consts::RUBY_IMMEDIATE_MASK as isize,
+    FixnumFlag = ruby_special_consts::RUBY_FIXNUM_FLAG as isize,
+    FlonumMask = ruby_special_consts::RUBY_FLONUM_MASK as isize,
+    FlonumFlag = ruby_special_consts::RUBY_FLONUM_FLAG as isize,
+    SymbolFlag = ruby_special_consts::RUBY_SYMBOL_FLAG as isize,
 }
 
-#[cfg(target_pointer_width = "64")]
-pub enum RubySpecialConsts {
-    False = 0,
-    True = 0x14,
-    Nil = 0x04,
-    Undef = 0x24,
-}
-
-#[cfg(target_pointer_width = "64")]
-pub enum RubySpecialFlags {
-    ImmediateMask = 0x07,
-    FixnumFlag = 0x01,
-    FlonumMask = 0x03,
-    FlonumFlag = 0x02,
-    SymbolFlag = 0x0c,
-}
 
 // #[link_name = "ruby_value_type"]
 #[derive(Debug, PartialEq)]

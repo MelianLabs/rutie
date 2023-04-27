@@ -24,7 +24,11 @@ no-link = [] # tells build.rs to not link to libruby
 rb-sys = "0.9.75"
 libc = "0.2.142"
 lazy_static = "1.4.0"
+backtrace = "0.3.61"
 
 [badges]
 travis-ci = { repository = "danielpclark/rutie", branch = "master" }
 maintenance = { status = "actively-developed" }
+
+[profile.release]
+debug = true

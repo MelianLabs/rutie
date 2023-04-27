@@ -1,4 +1,6 @@
 use std::{convert::From, mem};
+use backtrace::Backtrace;
+
 
 use crate::rubysys::{
     constant,
@@ -80,6 +82,8 @@ impl Value {
 
     pub fn is_nil(&self) -> bool {
         println!("is_nil {:?}", self.value);
+        let backtrace = Backtrace::new();
+        eprintln!("Backtrace:\n{:?}", backtrace);
         self.value == (RubySpecialConsts::Nil as InternalValue)
     }
 
